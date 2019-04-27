@@ -1,3 +1,3 @@
-## Queue Scanner Service
+## Kued API
 
-Server-side code for the queue-scanner
+RESTful web service for the Kued application
