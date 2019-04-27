@@ -1,0 +1,33 @@
+{
+  "name": "queue-scanner-service",
+  "version": "1.0.0",
+  "description": "Kued API",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"No Tests Setup\"",
+    "lint": "eslint src",
+    "start": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakeswork/queue-scanner-service.git"
+  },
+  "author": "Jake Flynn @jakeswork",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jakeswork/queue-scanner-service/issues"
+  },
+  "homepage": "https://github.com/jakeswork/queue-scanner-service#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^7.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "express": "^4.16.4",
+    "form-data": "^2.3.3",
+    "isomorphic-fetch": "^2.2.1",
+    "pino": "^5.12.3"
+  }
+}
