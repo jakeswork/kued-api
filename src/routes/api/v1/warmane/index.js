@@ -23,17 +23,12 @@ const getTeams = url => (
   })
 );
 
-router.post('/players', asyncMiddleware(async (req, res) => {
-  const { players } = req.body;
-  const resolvedPlayers = players.map(async (player) => {
-    const newPlayer = new Player(player);
-    const withTalents = await newPlayer.getTalents()
-      .catch(err => err);
+router.get('/player/:name/:realm', asyncMiddleware(async (req, res) => {
+  const { name, realm } = req.params;
+  const player = new Player({ name, realm });
+  const resolved = await player.getInfo();
 
-    return withTalents;
-  });
-
-  return Promise.all(resolvedPlayers).then(data => res.send(data));
+  return res.send(resolved);
 }));
 
 router.get('/wotlk/2v2', getTeams('http://armory.warmane.com/ladder/2v2/Icecrown'));
