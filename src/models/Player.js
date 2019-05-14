@@ -1,4 +1,5 @@
 const fetch = require('isomorphic-fetch');
+const { asyncPoll } = require('async-poll');
 
 const logger = require('../utils/logger');
 
@@ -11,38 +12,24 @@ class Player {
 
   async getInfo() {
     try {
+      const fn = async () => fetch(`http://armory.warmane.com/api/character/${this.name}/${this.realm}/summary`).then(r => r.json());
+      /** Keep polling until the more than 100 `news` are received or `status` returns `complete` */
+      const conditionFn = d => !d.error;
+      /** Poll every 2 seconds */
+      const interval = 3e3;
+      /** Timeout after 30 seconds and returns end result */
+      const timeout = 30e3;
+
+      asyncPoll(fn, conditionFn, { interval, timeout })
+        .catch(e => logger.error(new Error(e)));
+
+      const resolved = await asyncPoll(fn, conditionFn, { interval, timeout });
       const withTalents = await this.getTalents();
-      const useWarmaneApi = new Promise(async (resolve) => {
-        const fetchWarmaneApi = async () => {
-          const url = await fetch(`http://armory.warmane.com/api/character/${this.name}/${this.realm}/summary`);
-          const json = await url.json();
 
-          return json;
-        };
-
-        let response = await fetchWarmaneApi();
-
-        /*
-         * Warmane have a throttle on their player API.
-         *
-         * To get around this, if the response we get back has an error
-         * (i.e. there were too many requests)
-         * Then we will attempt one more time in 2 seconds.
-         */
-
-        if (!response.error) return resolve(response);
-
-        return setTimeout(async () => {
-          response = await fetchWarmaneApi();
-
-          return resolve(response);
-        }, 2000);
-      });
-
-      return useWarmaneApi.then(resolved => ({
-        ...withTalents,
+      return {
         ...resolved,
-      }));
+        ...withTalents,
+      };
     } catch (err) {
       const error = new Error(err);
 
