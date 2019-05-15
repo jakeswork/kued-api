@@ -12,19 +12,11 @@ class Player {
 
   async getInfo() {
     try {
-      const fn = async () => fetch(`http://armory.warmane.com/api/character/${this.name}/${this.realm}/summary`).then(r => r.json());
-      /** Keep polling until the more than 100 `news` are received or `status` returns `complete` */
-      const conditionFn = d => !d.error;
-      /** Poll every 2 seconds */
-      const interval = 3e3;
-      /** Timeout after 30 seconds and returns end result */
-      const timeout = 30e3;
-
-      asyncPoll(fn, conditionFn, { interval, timeout })
-        .catch(e => logger.error(new Error(e)));
-
-      const resolved = await asyncPoll(fn, conditionFn, { interval, timeout });
       const withTalents = await this.getTalents();
+      const warmaneApi = async () => fetch(`http://armory.warmane.com/api/character/${this.name}/${this.realm}/summary`).then(r => r.json());
+      const condition = d => !d.error;
+      const resolved = await asyncPoll(warmaneApi, condition, { interval: 3e3, timeout: 30e3 })
+        .catch(e => logger.error(new Error(e)));
 
       return {
         ...resolved,
