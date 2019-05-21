@@ -9,7 +9,7 @@ class Scraper {
 
   async getWarmaneLadder() {
     try {
-      logger.info(`Fetching ${this.url}`);
+      // logger.info(`Fetching ${this.url}`);
 
       const res = await fetch(this.url);
       const html = await res.text();

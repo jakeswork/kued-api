@@ -38,7 +38,7 @@ class Player {
       const playerHasDualSpec = html.split('td class="selected"')[1];
 
       if (playerHasDualSpec) {
-        logger.info(`Has dual spec. Fetched ${this.url}/talents`);
+        // logger.info(`Has dual spec. Fetched ${this.url}/talents`);
 
         return {
           spec: playerHasDualSpec.split('</a>')[0].split('alt="')[1].split('"')[0].trim(),
@@ -63,7 +63,7 @@ class Player {
 
   async getFallbackSpec() {
     try {
-      logger.info(`Only one set of talents found. Fetching ${this.url}/profile`);
+      // logger.info(`Only one set of talents found. Fetching ${this.url}/profile`);
 
       const playerURL = await fetch(`${this.url}/profile`);
       const html = await playerURL.text();
