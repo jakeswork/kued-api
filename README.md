@@ -1,3 +1,3 @@
 ## Kued API
 
-RESTful web service for the Kued application
+RESTful web service for [Kued](https://github.com/jakeswork/kued)
